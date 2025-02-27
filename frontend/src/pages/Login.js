@@ -25,7 +25,7 @@ const Login = () => {
     const logIn = async () => {
         try {
             const response = await postUrl("/auth/login", { name, email });
-            if (response.status === 200) {
+            if (response) {
                 navigatePage('/dogSearch');
             }
         } catch (error) {
