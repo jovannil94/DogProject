@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Box, Button, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import { postUrl } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,8 +20,24 @@ const Navbar = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" sx={{ bgcolor: "#300D38" }}>
                 <Toolbar>
+                    <img src="/fetch.svg" alt="Logo" width="40" height="40" style={{ marginRight: 10 }} />
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.1rem',
+                            color: "#FFA900",
+                            textDecoration: 'none',
+                        }}
+                    >
+                        Fetch Dog App
+                    </Typography>
                 <Button
                     type="submit"
                     color="error"

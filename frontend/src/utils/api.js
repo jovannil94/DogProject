@@ -10,7 +10,18 @@ const fetchClient = axios.create({
 
 const getUrl = async (url) => {
     try {
-        let response = await fetchClient.get(url);
+        const response = await fetchClient.get(url);
+        return response.data;
+    } catch (error) {
+        console.log(`Error accessing ${url}:`, error);
+    }
+};
+
+const getUrlWithParams = async (url, params) => {
+    try {
+        const queryString = new URLSearchParams(params).toString();
+        const response = await fetchClient.get(`${url}?${queryString}`);
+        debugger
         return response.data;
     } catch (error) {
         console.log(`Error accessing ${url}:`, error);
@@ -26,4 +37,4 @@ const postUrl = async (url, body = {}) => {
     }
 };
 
-export { getUrl, postUrl };
+export { getUrl, getUrlWithParams, postUrl };

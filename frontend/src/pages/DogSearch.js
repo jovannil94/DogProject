@@ -6,33 +6,34 @@ import Filtercard from '../components/Filtercard';
 import Dogcard from '../components/Dogcard';
 
 const DogSearch = () => {
-    const [dogBreeds, setDogBreeds] = useState([]);
-    const [dogs, setDogs] = useState([]);
-
-    const fetchDogBreeds = async () => {
-        try {
-            const response = await getUrl("/dogs/breeds");
-            setDogBreeds(response);
-        } catch (error) {
-            console.log("Error fetching dog breeds", error);
-        }
-    };
-
-    const fetchDogs = async () => {
-        try {
-            const fitleredDogs = await getUrl(`/dogs/search`);
-            let dogIds = fitleredDogs.resultIds
-            const dogResponse = await postUrl('/dogs', dogIds)
-            setDogs(dogResponse);
-        } catch (error) {
-            console.log("Eror fetching dogs", error)
-        }
-    };     
+    const [dogIds, setDogIds] = useState([])
+    const [dogResults, setDogResults] = useState([]);
 
     useEffect(() => {
-        fetchDogBreeds();
-        fetchDogs();
+        const fetchDogIds = async () => {
+            try {
+                const response = await getUrl("/dogs/search");
+                setDogIds(response.resultIds);
+            } catch (error) {
+                console.log("Error filtering dogs ids", error)
+            }
+        };
+        fetchDogIds()
     }, []);
+
+    useEffect(() => {
+        if (dogIds.length === 0) return;
+
+        const fetchDogs = async () => {
+            try {
+                const response = await postUrl("/dogs", dogIds);
+                setDogResults(response);
+            } catch (error) {
+                console.log("Error fetching dogs", error);
+            }
+        };
+        fetchDogs();
+    }, [dogIds]);
 
     return (
         <Box>
@@ -43,13 +44,13 @@ const DogSearch = () => {
                     borderRadius: 3, 
                 }}
             >
-                <Filtercard dogBreeds={ dogBreeds }/>
+                <Filtercard setDogIds={setDogIds} />
             </Box>
             <Box sx={{ flexGrow: 1, backgroundColor: 'lightgrey', padding: 3, }}>
                 <Grid container spacing={4}>
-                    {dogs.map((dog, index) => (
+                    {dogResults.map((dog, index) => (
                         <Grid size={3}>
-                            <Dogcard dog={dog} index={index}/>
+                            <Dogcard dog={dog} index={index} />
                         </Grid>
                     ))}
                 </Grid>
