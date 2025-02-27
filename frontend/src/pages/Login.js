@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { postUrl } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 

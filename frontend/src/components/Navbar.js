@@ -1,14 +1,11 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
+import { AppBar, Box, Button, Toolbar } from '@mui/material';
 import { postUrl } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const navigatePage = useNavigate();
-    
+
     const logOut = async () => {
         try {
             const response = await postUrl("/auth/logout");
