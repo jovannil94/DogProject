@@ -49,7 +49,7 @@ const DogSearch = () => {
             <Box sx={{ flexGrow: 1, backgroundColor: 'lightgrey', padding: 3, }}>
                 <Grid container spacing={4}>
                     {dogResults.map((dog, index) => (
-                        <Grid size={3}>
+                        <Grid size={3} key={index}>
                             <Dogcard dog={dog} index={index} />
                         </Grid>
                     ))}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState  } from 'react';
-import { Autocomplete, Button, Card, CardContent, CardActions, Collapse, FormControl, IconButton, MenuItem, Select, styled, TextField, Typography, } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, CardActions, Chip, Collapse, FormControl, IconButton, MenuItem, Select, styled, TextField, Typography, } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from '@mui/material/Grid2';
 import { getUrl, getUrlWithParams } from '../utils/api';
@@ -33,7 +33,9 @@ const Filtercard = ({ setDogIds }) => {
     const [expanded, setExpanded] = React.useState(false);
     const [dogBreeds, setDogBreeds] = useState([]);
     const [selectedBreeds, setSelectedBreeds] = useState([]);
-    const [zipCodes, setZipCodes] = useState([]);
+    const [zipCodeInput, setZipCodeInput] = useState("");
+    const [selectedZipCodes, setSelectedZipCodes] = useState([]);
+    const [zipCodeError, setZipCodeError] = useState(false);
     const [minAge, setMinAge] = useState("");
     const [maxAge, setMaxAge] = useState("");
     const [searchSize, setSearchSize] = useState("");
@@ -53,12 +55,28 @@ const Filtercard = ({ setDogIds }) => {
         setExpanded(!expanded);
     };
 
-    const handleZipCodes = (event, newZipCodes = []) => {
-        
+    const handleAddZipCode = () => {
+        let validZipcode = /^\d{5}$/.test(zipCodeInput);
+        if(!validZipcode || selectedZipCodes.includes(zipCodeInput)){
+            setZipCodeError(true);
+        };
+        if (zipCodeInput && !selectedZipCodes.includes(zipCodeInput) && validZipcode) {
+            setSelectedZipCodes([...selectedZipCodes, zipCodeInput]);
+            setZipCodeError(false);
+            setZipCodeInput("");
+        };
+    };
+
+    const handleRemoveZipCode = (removeZipCode) => {
+        const newZipCodes = selectedZipCodes.filter(zip => zip !== removeZipCode);
+        setSelectedZipCodes(newZipCodes);
     };
     
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
+    };
+
+    const handleResetFilter = () => {
     };
 
     const handleFilter = async () => {
@@ -66,6 +84,18 @@ const Filtercard = ({ setDogIds }) => {
     
         if (selectedBreeds.length) {
             selectedBreeds.forEach(breed => params.append("breeds", breed));
+        }
+        
+        if (selectedZipCodes.length) {
+            selectedZipCodes.forEach(zipCode => params.append("zipCodes", zipCode));
+        }
+
+        if (minAge) {
+            params.append("ageMin", minAge);
+        }
+
+        if (maxAge) {
+            params.append("ageMax", maxAge);
         }
     
         try {
@@ -99,7 +129,7 @@ const Filtercard = ({ setDogIds }) => {
                                 options={dogBreeds}
                                 autoHighlight
                                 value={selectedBreeds}
-                                onChange={(e, breedValue) => setSelectedBreeds(breedValue)}
+                                onChange={(_e, breedValue) => setSelectedBreeds(breedValue)}
                                 renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -108,26 +138,7 @@ const Filtercard = ({ setDogIds }) => {
                                 )}
                             />
                         </Grid>
-                        <Grid size={5}>
-                            <Autocomplete
-                                multiple
-                                freeSolo
-                                id="zip-code-selector"
-                                options={[]}
-                                autoHighlight
-                                value={zipCodes}
-                                onChange={handleZipCodes}
-                                renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Zip Code(s)"
-                                />
-                                )}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container justifyContent="space-between" sx={{ marginTop: 2 }}>
-                        <Grid size={5}>
+                        <Grid size={3}>
                             <TextField
                                 label="Min Age"
                                 type="number"
@@ -136,7 +147,7 @@ const Filtercard = ({ setDogIds }) => {
                                 onChange={(e) => setMinAge(e.target.value)}
                             />
                         </Grid>
-                        <Grid size={5}>
+                        <Grid size={3}>
                             <TextField
                                 label="Max Age"
                                 type="number"
@@ -146,18 +157,37 @@ const Filtercard = ({ setDogIds }) => {
                             />
                         </Grid>
                     </Grid>
+                    <Grid container justifyContent="space-between" sx={{ marginTop: 2 }}>
+                        <Grid container size={5} alignItems={"center"}>
+                            <Grid size={5}>
+                                <TextField
+                                    label="Zip Code(s)"
+                                    type="text"
+                                    fullWidth
+                                    value={zipCodeInput}
+                                    onChange={(e) => setZipCodeInput(e.target.value)}
+                                    error={zipCodeError}
+                                    helperText={zipCodeError ? "Invalid Zipcode or already added" : null}
+                                />
+                            </Grid>
+                            <Grid size={3}>
+                                <Button onClick={handleAddZipCode} variant="contained">Add Zip Code</Button>
+                            </Grid>
+                            <Grid size={8}>
+                                <Box sx={{ marginTop: 2 }}>
+                                    {selectedZipCodes.map((zipCode, index) => (
+                                        <Chip
+                                            key={index}
+                                            label={zipCode}
+                                            onDelete={() => handleRemoveZipCode(zipCode)}
+                                            sx={{ margin: 1 }}
+                                        />
+                                    ))}
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </CardContent>
-                <CardActions disableSpacing>
-                    <ExpandMore
-                        expand={expanded}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        <ExpandMoreIcon />
-                    </ExpandMore>
-                    <Button type='submit' onClick={handleFilter}>Filter</Button>
-                </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <TextField
@@ -183,6 +213,18 @@ const Filtercard = ({ setDogIds }) => {
                         </Select>
                     </CardContent>
                 </Collapse>
+                <CardActions disableSpacing>
+                    <ExpandMore
+                        expand={expanded}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                    >
+                        <ExpandMoreIcon />
+                    </ExpandMore>
+                    <Button type='submit' color='error' onClick={handleResetFilter}>Reset</Button>
+                    <Button type='submit' onClick={handleFilter}>Filter</Button>
+                </CardActions>
             </FormControl>
         </Card>
     )

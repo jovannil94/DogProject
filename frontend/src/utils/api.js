@@ -21,7 +21,6 @@ const getUrlWithParams = async (url, params) => {
     try {
         const queryString = new URLSearchParams(params).toString();
         const response = await fetchClient.get(`${url}?${queryString}`);
-        debugger
         return response.data;
     } catch (error) {
         console.log(`Error accessing ${url}:`, error);
