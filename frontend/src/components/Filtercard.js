@@ -76,8 +76,23 @@ const Filtercard = ({ setDogIds }) => {
         setSortBy(e.target.value);
     };
 
-    const handleResetFilter = () => {
-    };
+    const handleResetFilter = async () => {
+        setSelectedBreeds([]);
+        setZipCodeInput("");
+        setSelectedZipCodes([]);
+        setZipCodeError(false);
+        setMinAge("");
+        setMaxAge("");
+        setSearchSize("");
+        setFromPage("");
+        setSortBy("");
+        try {
+            const response = await getUrl("/dogs/search");
+            setDogIds(response.resultIds);
+        } catch (error) {
+            console.log("Error handling params:", error);
+        }
+    };    
 
     const handleFilter = async () => {
         const params = new URLSearchParams();

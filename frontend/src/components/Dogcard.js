@@ -17,9 +17,13 @@ const Dogcard = ({ dog, index }) => {
             }}
         >
             <CardMedia
-            sx={{ height: 250 }}
-            image={dog.img}
-            title={dog.name}
+                sx={{
+                    height: 'auto',
+                    width: '100%',
+                    aspectRatio: '1/1',
+                }}
+                image={dog.img}
+                title={dog.name}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
