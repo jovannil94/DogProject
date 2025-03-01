@@ -2,9 +2,10 @@ import React from 'react';
 import { Card, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Dogcard from './Dogcard';
-import Confetti from 'react-confetti'
+import Confetti from 'react-confetti';
 
 const Matchcard = ({ dogMatch }) => {
+    
     return (
         <Card sx={{ boxShadow: 5, borderRadius: 3, margin: 2, padding: 4 }}>
             <Grid container spacing={4} sx={{ display:"flex", flexDirection:"column", alignItems:"center" }}>

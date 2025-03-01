@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 
 const PageControls = ({ nextPage, prevPage, onNext, onPrev }) => {
     return (
-        <Box sx={{ display:"flex", flexDirection:"row", justifyContent:"center", gap: 20 }}>
+        <Box sx={{ display:"flex", flexDirection:"row", justifyContent:"center", gap: 20, marginTop: 2 }}>
             {prevPage.length ?
                 <Typography variant="h5" color="black" onClick={onPrev} sx={{ textShadow: "1px 1px 2px white", "&:hover": { cursor: "pointer" } }}>
                     Prev

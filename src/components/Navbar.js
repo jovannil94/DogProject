@@ -1,10 +1,13 @@
 import React from 'react';
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import { postUrl } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
     const navigatePage = useNavigate();
+    const location = useLocation();
+
+    const onLoginPage = location.pathname === '/login' || location.pathname === "/";
 
     const logOut = async () => {
         try {
@@ -41,16 +44,18 @@ const Navbar = () => {
                         Fetch Dog App
                     </Typography>
                     <Typography variant='subtitle1'>Created by Jovanni Luna</Typography>
-                    <Box sx={{ marginLeft: 'auto' }}>
-                        <Button
-                            type="submit"
-                            color="error"
-                            variant="contained"
-                            onClick={logOut}
-                        >
-                            Log out
-                        </Button>
-                    </Box>
+                    {!onLoginPage && (
+                        <Box sx={{ marginLeft: 'auto' }}>
+                            <Button
+                                type="submit"
+                                color="error"
+                                variant="contained"
+                                onClick={logOut}
+                            >
+                                Log out
+                            </Button>
+                        </Box>
+                    )}
                 </Toolbar>
             </AppBar>
         </Box>  
