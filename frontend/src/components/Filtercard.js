@@ -1,7 +1,7 @@
 import React, { useEffect, useState  } from 'react';
 import { Autocomplete, Box, Button, Card, CardContent, CardActions, Chip, FormControl, MenuItem, Select, TextField, Typography, } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getUrl, getUrlWithParams } from '../utils/api';
+import { getUrlWithParams } from '../utils/api';
 
 const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) => {
     const [dogBreeds, setDogBreeds] = useState([]);
@@ -19,7 +19,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
 
     const fetchDogBreeds = async () => {
         try {
-            const response = await getUrl("/dogs/breeds");
+            const response = await getUrlWithParams("/dogs/breeds");
             setDogBreeds(response);
         } catch (error) {
             console.log("Error fetching dog breeds", error);
@@ -55,7 +55,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
         setSortOrder("");
         setSearchSize("25");
         try {
-            const response = await getUrl("/dogs/search");
+            const response = await getUrlWithParams("/dogs/search");
             setDogIds(response.resultIds);
             setTotal(response.total);
             if(response.next) setNextPage(response.next);
@@ -92,6 +92,8 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
 
         if (sortBy) {
             params.append("sort", `${sortBy}:${sortOrder || "asc"}`);
+        } else {
+            params.append("sort", "breed:asc");
         };
     
         try {

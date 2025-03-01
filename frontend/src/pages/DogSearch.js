@@ -1,7 +1,7 @@
 import React, { useEffect, useState  } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { getUrl, postUrl } from '../utils/api';
+import { getUrlWithParams, postUrl } from '../utils/api';
 import Filtercard from '../components/Filtercard';
 import Dogcard from '../components/Dogcard';
 import PageControls from '../components/PageControls';
@@ -18,7 +18,7 @@ const DogSearch = () => {
         setNextPage("");
         setPrevPage("");
         try {
-            const response = await getUrl(nextPage);
+            const response = await getUrlWithParams(nextPage);
             setDogIds(response.resultIds);
             setTotal(response.total);
             if(response.next) setNextPage(response.next);
@@ -32,7 +32,7 @@ const DogSearch = () => {
         setNextPage("");
         setPrevPage("");
         try {
-            const response = await getUrl(prevPage);
+            const response = await getUrlWithParams(prevPage);
             setDogIds(response.resultIds);
             setTotal(response.total);
             if(response.next) setNextPage(response.next);
@@ -45,7 +45,7 @@ const DogSearch = () => {
     useEffect(() => {
         const fetchDogIds = async () => {
             try {
-                const response = await getUrl("/dogs/search");
+                const response = await getUrlWithParams("/dogs/search");
                 setDogIds(response.resultIds);
                 setTotal(response.total);
                 if(response.next) setNextPage(response.next);

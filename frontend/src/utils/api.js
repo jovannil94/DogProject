@@ -8,18 +8,13 @@ const fetchClient = axios.create({
     withCredentials: true,
 })
 
-const getUrl = async (url) => {
-    try {
-        const response = await fetchClient.get(url);
-        return response.data;
-    } catch (error) {
-        console.log(`Error accessing ${url}:`, error);
+const getUrlWithParams = async (url, params = new URLSearchParams()) => {
+    if (params.toString()  === "") {
+        params.append("sort", "breed:asc");
     }
-};
 
-const getUrlWithParams = async (url, params) => {
     try {
-        const queryString = new URLSearchParams(params).toString();
+        const queryString = params.toString();
         const response = await fetchClient.get(`${url}?${queryString}`);
         return response.data;
     } catch (error) {
@@ -36,4 +31,4 @@ const postUrl = async (url, body = {}) => {
     }
 };
 
-export { getUrl, getUrlWithParams, postUrl };
+export { getUrlWithParams, postUrl };
