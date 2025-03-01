@@ -1,5 +1,5 @@
 import React, { useEffect, useState  } from 'react';
-import { Autocomplete, Box, Button, Card, CardContent, CardActions, Chip, FormControl, MenuItem, Select, TextField, Typography, } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, CardActions, Chip, FormControl, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { getUrlWithParams } from '../utils/api';
 
@@ -12,7 +12,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
     const [minAge, setMinAge] = useState("");
     const [maxAge, setMaxAge] = useState("");
     const [sortBy, setSortBy] = useState("");
-    const [sortOrder, setSortOrder] = useState("");
+    const [sortOrder, setSortOrder] = useState("asc");
     const [searchSize, setSearchSize] = useState("25");
     const [resetLoading, setResetLoading] = useState(false);
     const [filterLoading, setFilterLoading] = useState(false);
@@ -120,76 +120,79 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                 borderRadius: 3,
             }}
         >
-            <FormControl fullWidth>
-                <CardContent>
-                    <Typography variant="h5">Filters</Typography>
-                    <Grid container sx={{ marginTop: 2 }}>
-                        <Grid size={4}>
-                            <Autocomplete
-                                multiple
-                                id="dog-breed-selector"
-                                options={dogBreeds}
-                                autoHighlight
-                                value={selectedBreeds}
-                                onChange={(_e, breedValue) => setSelectedBreeds(breedValue)}
-                                renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Breed(s)"
-                                />
-                                )}
-                            />
-                        </Grid>
-                        <Grid size={3} sx={{ marginLeft: 2, marginRight:2 }}>
+            <CardContent>
+                <Typography variant="h5">Filters</Typography>
+                <Grid container sx={{ marginTop: 2 }}>
+                    <Grid size={4}>
+                        <Autocomplete
+                            multiple
+                            id="dog-breed-selector"
+                            options={dogBreeds}
+                            autoHighlight
+                            value={selectedBreeds}
+                            onChange={(_e, breedValue) => setSelectedBreeds(breedValue)}
+                            renderInput={(params) => (
                             <TextField
-                                label="Min Age"
-                                type="number"
-                                fullWidth
-                                value={minAge}
-                                onChange={(e) => setMinAge(e.target.value)}
+                                {...params}
+                                label="Breed(s)"
                             />
-                        </Grid>
-                        <Grid size={3} sx={{ marginLeft: 2, marginRight:2 }}>
-                            <TextField
-                                label="Max Age"
-                                type="number"
-                                fullWidth
-                                value={maxAge}
-                                onChange={(e) => setMaxAge(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid size={4} sx={{ marginTop: 2 }}>
-                            <TextField
-                                label="Zip Code(s)"
-                                type="text"
-                                fullWidth
-                                value={zipCodeInput}
-                                onChange={(e) => setZipCodeInput(e.target.value)}
-                                error={zipCodeError}
-                                helperText={zipCodeError ? "Invalid Zipcode or already added" : null}
-                            />
-                        </Grid>
-                        <Grid size={8}>
-                            <Box sx={{ marginTop: 2 }}>
-                                {selectedZipCodes.length ? <Typography>Current Zipcodes:</Typography> : null}
-                                {selectedZipCodes.map((zipCode, index) => (
-                                    <Chip
-                                        key={index}
-                                        label={zipCode}
-                                        onDelete={() => handleRemoveZipCode(zipCode)}
-                                        sx={{ margin: 1 }}
-                                    />
-                                ))}
-                            </Box>
-                        </Grid>
-                        <Grid size={2} sx={{ marginTop: 2 }}>
-                            <Button onClick={handleAddZipCode} variant="contained">Add Zip Code</Button>
-                        </Grid>
+                            )}
+                        />
                     </Grid>
-                    <Typography variant="h5">Sort By</Typography>
-                    <Grid container sx={{ marginTop: 2, display: "flex", alignItems: "left" }}>
-                        <Grid item xs={3}>
+                    <Grid size={3} sx={{ marginLeft: 2, marginRight:2 }}>
+                        <TextField
+                            label="Min Age"
+                            type="number"
+                            fullWidth
+                            value={minAge}
+                            onChange={(e) => setMinAge(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid size={3}>
+                        <TextField
+                            label="Max Age"
+                            type="number"
+                            fullWidth
+                            value={maxAge}
+                            onChange={(e) => setMaxAge(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid size={4} sx={{ marginTop: 2 }}>
+                        <TextField
+                            label="Zip Code(s)"
+                            type="text"
+                            fullWidth
+                            value={zipCodeInput}
+                            onChange={(e) => setZipCodeInput(e.target.value)}
+                            error={zipCodeError}
+                            helperText={zipCodeError ? "Invalid Zipcode or already added" : null}
+                        />
+                    </Grid>
+                    <Grid size={8}>
+                        <Box sx={{ marginTop: 2 }}>
+                            {selectedZipCodes.length ? <Typography>Current Zipcodes:</Typography> : null}
+                            {selectedZipCodes.map((zipCode, index) => (
+                                <Chip
+                                    key={index}
+                                    label={zipCode}
+                                    onDelete={() => handleRemoveZipCode(zipCode)}
+                                    sx={{ margin: 1 }}
+                                />
+                            ))}
+                        </Box>
+                    </Grid>
+                    <Grid size={2} sx={{ marginTop: 2 }}>
+                        <Button onClick={handleAddZipCode} variant="contained">Add Zip Code</Button>
+                    </Grid>
+                </Grid>
+                <Typography variant="h5">Sort By</Typography>
+                <Grid container sx={{ marginTop: 2, display: "flex", alignItems: "left" }}>
+                    <Grid size={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="sortBy">Sort By</InputLabel>
                             <Select
+                                labelId="sortBy"
+                                id="sortBy"
                                 value={sortBy}
                                 label="Sort By"
                                 onChange={(e) => setSortBy(e.target.value)}
@@ -198,23 +201,31 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                                 <MenuItem value={"name"}>Name</MenuItem>
                                 <MenuItem value={"age"}>Age</MenuItem>
                             </Select>
-                        </Grid>
-                        <Grid item xs={3}>
-                            {sortBy !== "" ? 
-                                <Select
-                                    value={sortOrder}
-                                    label="Sort Order"
-                                    onChange={(e) => setSortOrder(e.target.value)}
-                                >
-                                    <MenuItem value={"asc"}>Asc</MenuItem>
-                                    <MenuItem value={"desc"}>Desc</MenuItem>
-                                </Select>
-                            : null}
-                        </Grid>
-                        <Grid item xs={3}>
+                        </FormControl>
+                    </Grid>
+                    <Grid size={2} sx={{ marginLeft: 2, marginRight:2 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="sortOrder">Sort Order</InputLabel>
                             <Select
+                                labelId="sortOrder"
+                                id="sortOrder"
+                                value={sortOrder}
+                                label="Sort Order"
+                                onChange={(e) => setSortOrder(e.target.value)}
+                            >
+                                <MenuItem value={"asc"}>Asc</MenuItem>
+                                <MenuItem value={"desc"}>Desc</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid size={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="dogSize">Dogs per page</InputLabel>
+                            <Select
+                                labelId="dogSize"
+                                id="dogSize"
                                 value={searchSize}
-                                label="Dogs by page"
+                                label="Dogs per page"
                                 onChange={(e) => setSearchSize(e.target.value)}
                             >
                                 <MenuItem value={25}>25</MenuItem>
@@ -222,15 +233,23 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                                 <MenuItem value={75}>75</MenuItem>
                                 <MenuItem value={100}>100</MenuItem>
                             </Select>
-                        </Grid>
+                        </FormControl>
                     </Grid>
-                    <Typography>Total Dogs: {total}</Typography>
-                </CardContent>
-                <CardActions disableSpacing>
-                    <Button type='submit' color='error' loading={resetLoading} loadingPosition="end" onClick={handleResetFilter}>Reset</Button>
-                    <Button type='submit' loading={filterLoading} loadingPosition="end" onClick={handleFilter}>Filter</Button>
-                </CardActions>
-            </FormControl>
+                    <TextField
+                        label="Total Dogs"
+                        value={total}
+                        slotProps={{
+                            input: {
+                            readOnly: true,
+                            },
+                        }}
+                    />
+                </Grid>
+            </CardContent>
+            <CardActions disableSpacing>
+                <Button type='submit' color='error' loading={resetLoading} loadingPosition="end" onClick={handleResetFilter}>Reset</Button>
+                <Button type='submit' loading={filterLoading} loadingPosition="end" onClick={handleFilter}>Filter</Button>
+            </CardActions>
         </Card>
     )
 };
