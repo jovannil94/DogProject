@@ -11,6 +11,8 @@ const Navbar = () => {
             const response = await postUrl("/auth/logout");
             if (response) {
                 navigatePage('/login');
+            } else {
+                navigatePage('/');
             }
         } catch (error) {
             console.log("Error logging out:", error);

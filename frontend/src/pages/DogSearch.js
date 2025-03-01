@@ -1,19 +1,55 @@
 import React, { useEffect, useState  } from 'react';
-import { Box, } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { getUrl, postUrl } from '../utils/api';
 import Filtercard from '../components/Filtercard';
 import Dogcard from '../components/Dogcard';
+import PageControls from '../components/PageControls';
 
 const DogSearch = () => {
     const [dogIds, setDogIds] = useState([])
     const [dogResults, setDogResults] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [nextPage, setNextPage] = useState("");
+    const [prevPage, setPrevPage] = useState("");
+    const [dogsLoading, setDogsLoading] = useState(false);
+
+    const onNext = async () => {
+        setNextPage("");
+        setPrevPage("");
+        try {
+            const response = await getUrl(nextPage);
+            setDogIds(response.resultIds);
+            setTotal(response.total);
+            if(response.next) setNextPage(response.next);
+            if(response.prev) setPrevPage(response.prev);
+        } catch (error) {
+            console.log("Error fetching next page:", error)
+        };
+    };
+
+    const onPrev = async () => {
+        setNextPage("");
+        setPrevPage("");
+        try {
+            const response = await getUrl(prevPage);
+            setDogIds(response.resultIds);
+            setTotal(response.total);
+            if(response.next) setNextPage(response.next);
+            if(response.prev) setPrevPage(response.prev);
+        } catch (error) {
+            console.log("Error fetching next page:", error)
+        };
+    };
 
     useEffect(() => {
         const fetchDogIds = async () => {
             try {
                 const response = await getUrl("/dogs/search");
                 setDogIds(response.resultIds);
+                setTotal(response.total);
+                if(response.next) setNextPage(response.next);
+                if(response.prev) setPrevPage(response.prev);
             } catch (error) {
                 console.log("Error filtering dogs ids", error)
             }
@@ -25,12 +61,14 @@ const DogSearch = () => {
         if (dogIds.length === 0) return;
 
         const fetchDogs = async () => {
+            setDogsLoading(true);
             try {
                 const response = await postUrl("/dogs", dogIds);
                 setDogResults(response);
             } catch (error) {
                 console.log("Error fetching dogs", error);
             }
+            setDogsLoading(false);
         };
         fetchDogs();
     }, [dogIds]);
@@ -44,16 +82,21 @@ const DogSearch = () => {
                     borderRadius: 3, 
                 }}
             >
-                <Filtercard setDogIds={setDogIds} />
+                <Filtercard setDogIds={setDogIds} total={total} setTotal={setTotal} setNextPage={setNextPage} setPrevPage={setPrevPage} />
             </Box>
             <Box sx={{ flexGrow: 1, backgroundColor: 'lightgrey', padding: 3, }}>
-                <Grid container spacing={4}>
-                    {dogResults.map((dog, index) => (
-                        <Grid size={3} key={index}>
-                            <Dogcard dog={dog} index={index} />
-                        </Grid>
-                    ))}
-                </Grid>
+                {dogsLoading ? (
+                    <CircularProgress />
+                ): (
+                    <Grid container spacing={4}>
+                        {dogResults.map((dog, index) => (
+                            <Grid size={3} key={index}>
+                                <Dogcard dog={dog} index={index} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                )}
+                <PageControls nextPage={nextPage} prevPage={prevPage} onNext={onNext} onPrev={onPrev} />
             </Box>
         </Box> 
     )
