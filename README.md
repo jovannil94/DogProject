@@ -70,6 +70,7 @@ The application consists of two pages and multiple components each responsible f
 - Add googlemaps/mapbox for a map of local dogs, maybe directions.
 - Use user's device location for nearby dogs
 - Pagination numbers at the bottom of the page to navigate
+- Mobile compatiblity
 - Time constraints, fees for google/mapbox api, more detailed vision.
 
 ## Available Scripts
