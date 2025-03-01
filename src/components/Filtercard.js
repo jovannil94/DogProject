@@ -1,7 +1,7 @@
 import React, { useEffect, useState  } from 'react';
 import { Autocomplete, Button, Card, CardContent, CardActions, Chip, FormControl, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getUrlWithParams, postUrl } from '../utils/api';
+import { getUrlWithParams } from '../utils/api';
 
 const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage, favoriteDogs, generateMatch }) => {
     const [dogBreeds, setDogBreeds] = useState([]);
