@@ -39,7 +39,15 @@ const Login = () => {
                 height: '100vh',
             }}
         >
-            <Stack spacing={4} sx={{ width: '100%', maxWidth: '400px' }}>
+            <Stack spacing={4} 
+                sx={{ 
+                    boxShadow: 5,
+                    borderRadius: 3,
+                    margin: 2,
+                    padding: 4, 
+                    bgcolor: 'white',
+                    width: 500,
+                }}>
                 <Typography component="h1" variant="h5">
                     Log In
                 </Typography>

@@ -40,14 +40,16 @@ const Navbar = () => {
                     >
                         Fetch Dog App
                     </Typography>
-                <Button
-                    type="submit"
-                    color="error"
-                    variant="contained"
-                    onClick={logOut}
-                >
-                    Log out
-                </Button>
+                    <Box sx={{ marginLeft: 'auto' }}>
+                        <Button
+                            type="submit"
+                            color="error"
+                            variant="contained"
+                            onClick={logOut}
+                        >
+                            Log out
+                        </Button>
+                    </Box>
                 </Toolbar>
             </AppBar>
         </Box>  

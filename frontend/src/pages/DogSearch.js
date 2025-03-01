@@ -15,6 +15,7 @@ const DogSearch = () => {
     const [prevPage, setPrevPage] = useState("");
     const [dogsLoading, setDogsLoading] = useState(false);
     const [favoriteDogs, setFavoriteDogs] = useState([]);
+    const [dogMatch, setDogMatch] = useState();
 
     const onNext = async () => {
         setNextPage("");
@@ -54,6 +55,16 @@ const DogSearch = () => {
         });
     };
 
+    const generateMatch = async () => {
+        try{
+            const match = await postUrl("/dogs/match", favoriteDogs);
+            const response = await postUrl("/dogs", [match.match]);
+            setDogMatch(response[0]);
+        } catch (error) {
+            console.log("Error generating match:", error);
+        }
+    };
+
     useEffect(() => {
         const fetchDogIds = async () => {
             try {
@@ -87,33 +98,22 @@ const DogSearch = () => {
 
     return (
         <Box>
-            <Box 
-                sx={{ 
-                    padding: 4, 
-                    boxShadow: 5, 
-                    borderRadius: 3, 
-                }}
-            >
-                <Filtercard setDogIds={setDogIds} total={total} setTotal={setTotal} setNextPage={setNextPage} setPrevPage={setPrevPage} />
+            <Box>
+                {dogMatch ? (
+                    <Box>
+                        <Matchcard dogMatch={dogMatch} />
+                    </Box>
+                ) : (
+                    <Filtercard setDogIds={setDogIds} total={total} setTotal={setTotal} setNextPage={setNextPage} setPrevPage={setPrevPage} favoriteDogs={favoriteDogs} generateMatch={generateMatch} />
+                )}
             </Box>
-            {favoriteDogs.length ? (
-                <Box
-                    sx={{ 
-                        padding: 4, 
-                        boxShadow: 5, 
-                        borderRadius: 3, 
-                    }}
-                >
-                    <Matchcard favoriteDogs={favoriteDogs} />
-                </Box>
-            ) : null}
-            <Box sx={{ flexGrow: 1, backgroundColor: 'lightgrey', padding: 3, }}>
+            <Box sx={{ padding: 4 }}>
                 {dogsLoading ? (
                     <CircularProgress />
                 ): (
-                    <Grid container spacing={4}>
+                    <Grid container spacing={3}>
                         {dogResults.map((dog, index) => (
-                            <Grid size={3} key={index}>
+                            <Grid size={2} key={index}>
                                 <Dogcard dog={dog} index={index} favoriteDogs={favoriteDogs} toggleFavoriteDog={toggleFavoriteDog} />
                             </Grid>
                         ))}

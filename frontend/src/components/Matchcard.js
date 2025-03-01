@@ -1,35 +1,21 @@
-import React, { useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import React from 'react';
+import { Card, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { postUrl } from '../utils/api';
 import Dogcard from './Dogcard';
+import Confetti from 'react-confetti'
 
-const Matchcard = ({ favoriteDogs }) => {
-    const [dogMatch, setDogMatch] = useState([]);
-
-    const generateMatch = async () => {
-        try{
-            const match = await postUrl("/dogs/match", favoriteDogs);
-            const response = await postUrl("/dogs", [match.match]);
-            setDogMatch(response[0]);
-        } catch (error) {
-            console.log("Error generating match:", error);
-        }
-    };
-
+const Matchcard = ({ dogMatch }) => {
     return (
-        <Box sx={{ flexGrow: 1, backgroundColor: 'lightgrey', padding: 3, }}>
-            <Button onClick={generateMatch}>Generate Match</Button>
-            {dogMatch ? (
-                <Grid container spacing={4} sx={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
-                    <Typography variant="h5">Your Adoption Match! </Typography>
-                    <Grid size={3}>
-                        <Dogcard dog={dogMatch} />
-                     </Grid>
-                    <Typography>Please refer to your Fetch agent to procceed in adoption process</Typography>
-                </Grid>
-            ) : null}
-        </Box>
+        <Card sx={{ boxShadow: 5, borderRadius: 3, margin: 2, padding: 4 }}>
+            <Grid container spacing={4} sx={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
+                <Confetti/>
+                <Typography variant="h5">Your Adoption Match! </Typography>
+                <Grid size={3}>
+                    <Dogcard dog={dogMatch} />
+                    </Grid>
+                <Typography>Please refer to your Fetch agent to procceed in adoption process</Typography>
+            </Grid>
+        </Card>
     )
 };
 

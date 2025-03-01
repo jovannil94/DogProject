@@ -7,11 +7,11 @@ const Dogcard = ({ dog, index, favoriteDogs = [], toggleFavoriteDog }) => {
         <Card 
             key={index} 
             sx={{ 
-                boxShadow: 2, 
+                boxShadow: 5, 
                 borderRadius: 3,
                 transition: "transform 0.2s ease-in-out",
                 "&:hover": {
-                    transform: "scale(1.08)",
+                    transform: "scale(1.09)",
                     boxShadow: 5,
                 },
                 position: "relative",

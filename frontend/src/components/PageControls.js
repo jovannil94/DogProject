@@ -1,18 +1,18 @@
-import { Box, Link } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 
 const PageControls = ({ nextPage, prevPage, onNext, onPrev }) => {
     return (
-        <Box>
+        <Box sx={{ display:"flex", flexDirection:"row", justifyContent:"center", gap: 20 }}>
             {prevPage.length ?
-                <Link onClick={onPrev} underline="hover">
+                <Typography variant="h5" color="black" onClick={onPrev} sx={{ textShadow: "1px 1px 2px white", "&:hover": { cursor: "pointer" } }}>
                     Prev
-                </Link>
+                </Typography>
             : null}
             {nextPage.length ?
-                <Link onClick={onNext} underline="hover">
+                <Typography variant="h5" color="black" onClick={onNext} sx={{ textShadow: "1px 1px 2px white", "&:hover": { cursor: "pointer" } }}>
                     Next
-                </Link> 
+                </Typography> 
             : null}
         </Box>
     )

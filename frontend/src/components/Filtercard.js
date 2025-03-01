@@ -1,9 +1,9 @@
 import React, { useEffect, useState  } from 'react';
-import { Autocomplete, Box, Button, Card, CardContent, CardActions, Chip, FormControl, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, CardActions, Chip, FormControl, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { getUrlWithParams } from '../utils/api';
 
-const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) => {
+const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage, favoriteDogs, generateMatch }) => {
     const [dogBreeds, setDogBreeds] = useState([]);
     const [selectedBreeds, setSelectedBreeds] = useState([]);
     const [zipCodeInput, setZipCodeInput] = useState("");
@@ -114,12 +114,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
     }, []);
 
     return (
-        <Card
-            sx={{ 
-                boxShadow: 2, 
-                borderRadius: 3,
-            }}
-        >
+        <Card sx={{ boxShadow: 5, borderRadius: 3, margin: 2, padding: 4 }}>
             <CardContent>
                 <Typography variant="h5">Filters</Typography>
                 <Grid container sx={{ marginTop: 2 }}>
@@ -145,6 +140,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                             type="number"
                             fullWidth
                             value={minAge}
+                            InputProps={{ inputProps: { min: 0, max: 30 } }}
                             onChange={(e) => setMinAge(e.target.value)}
                         />
                     </Grid>
@@ -154,10 +150,13 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                             type="number"
                             fullWidth
                             value={maxAge}
+                            InputProps={{ inputProps: { min: 0, max: 30 } }}
                             onChange={(e) => setMaxAge(e.target.value)}
                         />
                     </Grid>
-                    <Grid size={4} sx={{ marginTop: 2 }}>
+                </Grid>
+                <Grid container sx={{ marginTop: 2, alignItems: "center" }}>
+                    <Grid size={2}>
                         <TextField
                             label="Zip Code(s)"
                             type="text"
@@ -168,8 +167,11 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                             helperText={zipCodeError ? "Invalid Zipcode or already added" : null}
                         />
                     </Grid>
+                    <Grid size={2}>
+                        <Button onClick={handleAddZipCode} variant="contained">Add Zip Code</Button>
+                    </Grid>
                     <Grid size={8}>
-                        <Box sx={{ marginTop: 2 }}>
+                        <Grid sx={{ display:"flex", flexDirection:"row", alignItems: "center" }}>
                             {selectedZipCodes.length ? <Typography>Current Zipcodes:</Typography> : null}
                             {selectedZipCodes.map((zipCode, index) => (
                                 <Chip
@@ -179,10 +181,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                                     sx={{ margin: 1 }}
                                 />
                             ))}
-                        </Box>
-                    </Grid>
-                    <Grid size={2} sx={{ marginTop: 2 }}>
-                        <Button onClick={handleAddZipCode} variant="contained">Add Zip Code</Button>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Typography variant="h5">Sort By</Typography>
@@ -247,10 +246,19 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                     </Grid>
                 </Grid>
             </CardContent>
-            <CardActions disableSpacing>
+            <CardActions 
+                sx={{ 
+                    justifyContent: "flex-end", 
+                    marginTop: "auto", 
+                    "&:hover": { cursor: "pointer" },
+                 }}>
                 <Button type='submit' color='error' loading={resetLoading} loadingPosition="end" onClick={handleResetFilter}>Reset</Button>
                 <Button type='submit' loading={filterLoading} loadingPosition="end" onClick={handleFilter}>Filter</Button>
             </CardActions>
+            <Grid container sx={{ display:"flex", flexDirection:"column", alignItems:"center", gap: 3}}>
+                <Typography variant='h6'>Favorite dogs to see a possible adoption match</Typography>
+                {favoriteDogs.length ? <Button onClick={generateMatch} variant='contained'>Adoption Match</Button> : null}
+            </Grid>
         </Card>
     )
 };
