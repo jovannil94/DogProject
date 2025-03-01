@@ -123,7 +123,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
             <CardContent>
                 <Typography variant="h5">Filters</Typography>
                 <Grid container sx={{ marginTop: 2 }}>
-                    <Grid size={4}>
+                    <Grid size={4} sx={{ marginRight:2 }}>
                         <Autocomplete
                             multiple
                             id="dog-breed-selector"
@@ -139,7 +139,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                             )}
                         />
                     </Grid>
-                    <Grid size={3} sx={{ marginLeft: 2, marginRight:2 }}>
+                    <Grid size={3} sx={{ marginRight:2 }}>
                         <TextField
                             label="Min Age"
                             type="number"
@@ -187,7 +187,17 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                 </Grid>
                 <Typography variant="h5">Sort By</Typography>
                 <Grid container sx={{ marginTop: 2, display: "flex", alignItems: "left" }}>
-                    <Grid size={2}>
+                    <TextField
+                        label="Total Dogs"
+                        value={total}
+                        slotProps={{
+                            input: {
+                            readOnly: true,
+                            },
+                        }}
+                        sx={{ marginRight:2 }}
+                    />
+                    <Grid size={2} sx={{ marginRight:2 }}>
                         <FormControl fullWidth>
                             <InputLabel id="sortBy">Sort By</InputLabel>
                             <Select
@@ -203,7 +213,7 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid size={2} sx={{ marginLeft: 2, marginRight:2 }}>
+                    <Grid size={2} sx={{ marginRight:2 }}>
                         <FormControl fullWidth>
                             <InputLabel id="sortOrder">Sort Order</InputLabel>
                             <Select
@@ -235,15 +245,6 @@ const Filtercard = ({ setDogIds, total, setTotal, setNextPage, setPrevPage }) =>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <TextField
-                        label="Total Dogs"
-                        value={total}
-                        slotProps={{
-                            input: {
-                            readOnly: true,
-                            },
-                        }}
-                    />
                 </Grid>
             </CardContent>
             <CardActions disableSpacing>

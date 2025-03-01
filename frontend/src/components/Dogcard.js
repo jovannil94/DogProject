@@ -2,7 +2,7 @@ import { Card, CardMedia, CardContent, CardActions, IconButton, Typography } fro
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
-const Dogcard = ({ dog, index }) => {
+const Dogcard = ({ dog, index, favoriteDogs = [], toggleFavoriteDog }) => {
     return (
         <Card 
             key={index} 
@@ -13,7 +13,8 @@ const Dogcard = ({ dog, index }) => {
                 "&:hover": {
                     transform: "scale(1.08)",
                     boxShadow: 5,
-                }, 
+                },
+                position: "relative",
             }}
         >
             <CardMedia
@@ -39,11 +40,13 @@ const Dogcard = ({ dog, index }) => {
                     Zip Code: {dog.zip_code}
                 </Typography>
             </CardContent>
-            <CardActions>
-                <IconButton sx={{ "&:hover": { cursor: "pointer" } }} aria-label="add to favorites">
-                    <FavoriteIcon />
-                </IconButton>
-            </CardActions>
+            {toggleFavoriteDog ? (
+                <CardActions>
+                    <IconButton onClick={() => toggleFavoriteDog(dog.id)} sx={{ position: "absolute", bottom: 8, right: 8, color: favoriteDogs.includes(dog.id) ? "red" : "grey", "&:hover": { cursor: "pointer" } }} aria-label="add to favorites">
+                        <FavoriteIcon />
+                    </IconButton>
+                </CardActions>
+            ) : null}
         </Card>
     )
 };
