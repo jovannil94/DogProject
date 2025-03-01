@@ -9,7 +9,10 @@ const Matchcard = ({ dogMatch }) => {
     return (
         <Card sx={{ boxShadow: 5, borderRadius: 3, margin: 2, padding: 4 }}>
             <Grid container spacing={4} sx={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
-                <Confetti/>
+                <Confetti 
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                />
                 <Typography variant="h5">Your Adoption Match! </Typography>
                 <Grid size={3}>
                     <Dogcard dog={dogMatch} />
