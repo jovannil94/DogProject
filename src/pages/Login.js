@@ -8,6 +8,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [nameValid, setNameValid] = useState(false);
     const [emailValid, setEmailValid] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
     const navigatePage = useNavigate();
 
     const handleChange = (field, value) => {
@@ -19,6 +20,7 @@ const Login = () => {
     };
 
     const logIn = async () => {
+        setSubmitted(true);
         const isNameValid = /^[A-Za-z\s]+$/.test(name.trim());
         const isEmailValid = /\S+@\S+\.\S+/.test(email);
 
@@ -67,8 +69,8 @@ const Login = () => {
                     autoComplete="name"
                     autoFocus
                     value={name}
-                    error={!nameValid && name.length}
-                    helperText={!nameValid && name.length ? "Invalid name format" : null}
+                    error={submitted && (!nameValid || !name)}
+                    helperText={submitted && (!nameValid || !name) ? "Invalid name, alphabetical characters only" : null}
                     onChange={(e) => handleChange("name", e.target.value)}
                 />
                 <TextField
@@ -79,8 +81,8 @@ const Login = () => {
                     autoComplete="email"
                     autoFocus
                     value={email}
-                    error={!emailValid && email.length}
-                    helperText={!emailValid && email.length  ? "Invalid email format" : null}
+                    error={submitted && (!emailValid || !email)}
+                    helperText={submitted && (!emailValid || !email) ? "Invalid email" : null}
                     onChange={(e) => handleChange("email", e.target.value)}
                 />
                 <Button 
