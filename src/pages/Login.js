@@ -6,29 +6,37 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [nameValid, setNameValid] = useState(false);
+    const [emailValid, setEmailValid] = useState(false);
     const navigatePage = useNavigate();
-    
-    const setValue = (value, e) => {
-        e.preventDefault();
 
-        if(value === "name") {
-            setName(e.target.value);
+    const handleChange = (field, value) => {
+        if (field === "name") {
+            setName(value);
         } else {
-            setEmail(e.target.value);
+            setEmail(value);
         }
-    }
+    };
 
     const logIn = async () => {
-        try {
-            const response = await postUrl("/auth/login", { name, email });
-            if (response) {
-                navigatePage('/dogSearch');
+        const isNameValid = /^[A-Za-z\s]+$/.test(name.trim());
+        const isEmailValid = /\S+@\S+\.\S+/.test(email);
+
+        setNameValid(isNameValid);
+        setEmailValid(isEmailValid);
+
+        if (isNameValid && isEmailValid) {
+            try {
+                const response = await postUrl("/auth/login", { name, email });
+                if (response) {
+                    navigatePage('/dogSearch');
+                }
+            } catch (error) {
+                console.log("Error logging in:", error);
+                alert("Login failed, verify name and email");
             }
-        } catch (error) {
-            console.log("Error logging in:", error);
-            alert("Login failed, verify name and email");
         }
-    }
+    };
 
     return (
         <Box
@@ -59,7 +67,9 @@ const Login = () => {
                     autoComplete="name"
                     autoFocus
                     value={name}
-                    onChange={(e) => setValue("name", e)}
+                    error={!nameValid && name.length}
+                    helperText={!nameValid && name.length ? "Invalid name format" : null}
+                    onChange={(e) => handleChange("name", e.target.value)}
                 />
                 <TextField
                     label="Email"
@@ -69,7 +79,9 @@ const Login = () => {
                     autoComplete="email"
                     autoFocus
                     value={email}
-                    onChange={(e) => setValue("email", e)}
+                    error={!emailValid && email.length}
+                    helperText={!emailValid && email.length  ? "Invalid email format" : null}
+                    onChange={(e) => handleChange("email", e.target.value)}
                 />
                 <Button 
                     type="submit"
@@ -82,6 +94,6 @@ const Login = () => {
             </Stack>
         </Box>
     )
-}
+};
 
 export default Login;
