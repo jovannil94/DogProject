@@ -40,6 +40,7 @@ const Navbar = () => {
                     >
                         Fetch Dog App
                     </Typography>
+                    <Typography variant='subtitle1'>Created by Jovanni Luna</Typography>
                     <Box sx={{ marginLeft: 'auto' }}>
                         <Button
                             type="submit"
